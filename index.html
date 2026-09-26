@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lista prioritaria | SPC — Violeta Gil Pablo</title>
+<meta name="description" content="Las plazas de SPC están cerradas. La próxima apertura se avisa únicamente aquí, a puerta cerrada.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@300;400;500;600;700&family=Varela+Round&display=swap" rel="stylesheet">
+<style>
+:root{
+  --vino:#784755;
+  --vino-claro:#8d5a68;
+  --oro:#efdb82;
+  --rosa:#d19c92;
+  --crema:#fef9e7;
+  --beige:#f1e9e1;
+  --negro:#292929;
+
+  --fondo:#1b1014;
+  --fondo-2:#241518;
+  --texto:#f3e9ea;
+  --texto-suave:#c9b3b8;
+  --borde:rgba(239,219,130,.28);
+  --borde-suave:rgba(243,233,234,.14);
+
+  --titulo:"League Spartan", sans-serif;
+  --cuerpo:"Varela Round", sans-serif;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+
+body{
+  font-family:var(--cuerpo);
+  background:var(--fondo);
+  color:var(--texto);
+  font-size:17px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+/* Fondo decorativo: chevrons suaves + halos */
+.fondo{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.fondo::before{
+  content:"";position:absolute;inset:-10%;
+  background:
+    radial-gradient(60% 40% at 15% 8%, rgba(120,71,85,.55), transparent 65%),
+    radial-gradient(50% 35% at 85% 20%, rgba(209,156,146,.16), transparent 70%),
+    radial-gradient(70% 50% at 50% 105%, rgba(120,71,85,.42), transparent 70%);
+}
+.chevrons{
+  position:absolute;top:0;bottom:0;width:38vw;opacity:.5;
+  background-image:
+    linear-gradient(135deg, transparent 46%, rgba(243,233,234,.045) 46%, rgba(243,233,234,.045) 54%, transparent 54%),
+    linear-gradient(225deg, transparent 46%, rgba(243,233,234,.045) 46%, rgba(243,233,234,.045) 54%, transparent 54%);
+  background-size:260px 260px;
+}
+.chevrons.izq{left:-12vw}
+.chevrons.der{right:-12vw;transform:scaleX(-1)}
+
+.envoltorio{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:0 22px 90px}
+
+/* ---------- Cabecera / logo ---------- */
+.cabecera{padding:52px 0 8px;text-align:center}
+
+/* PLACEHOLDER LOGO — sustituir por: <img src="logo-violeta.png" alt="Violeta Gil Pablo"> */
+.logo{display:inline-block;max-width:250px;width:100%}
+.logo img{width:100%;height:auto;display:block}
+.logo-placeholder{
+  display:flex;align-items:center;justify-content:center;
+  height:74px;border:1px dashed var(--borde);border-radius:10px;
+  font-family:var(--titulo);font-size:13px;letter-spacing:3px;
+  text-transform:uppercase;color:rgba(239,219,130,.55);
+}
+
+/* ---------- Hero ---------- */
+.hero{text-align:center;padding:38px 0 6px}
+
+.etiqueta{
+  display:inline-block;
+  font-size:12px;letter-spacing:3.4px;text-transform:uppercase;
+  color:var(--oro);
+  border:1px solid var(--borde);
+  border-radius:999px;
+  padding:8px 20px;
+  margin-bottom:28px;
+}
+
+h1{
+  font-family:var(--titulo);
+  font-weight:500;
+  font-size:clamp(30px,6.4vw,50px);
+  line-height:1.08;
+  letter-spacing:.5px;
+  text-transform:uppercase;
+  color:#fff;
+}
+h1 .comillas{
+  display:block;
+  color:var(--oro);
+  font-weight:600;
+  letter-spacing:2px;
+  margin-top:6px;
+}
+
+.subrayado{
+  width:62px;height:2px;
+  background:linear-gradient(90deg,var(--oro),var(--rosa));
+  margin:30px auto 0;border-radius:2px;
+}
+
+/* PLACEHOLDER FOTO — sustituir el div por: <img src="violeta.jpg" alt="Violeta Gil Pablo"> */
+.foto{margin:38px auto 0;max-width:300px}
+.foto img{width:100%;height:auto;display:block;border-radius:16px}
+.foto-placeholder{
+  aspect-ratio:4/5;border:1px dashed var(--borde-suave);border-radius:16px;
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  font-size:12px;letter-spacing:2.4px;text-transform:uppercase;
+  color:rgba(243,233,234,.35);padding:20px;
+  background:rgba(243,233,234,.02);
+}
+
+/* ---------- Copy ---------- */
+.texto{padding:40px 0 4px;text-align:center}
+.texto p{margin-bottom:20px;color:var(--texto-suave)}
+.texto p:last-child{margin-bottom:0}
+.texto strong{color:var(--oro);font-weight:400}
+.texto .blanco{color:var(--texto)}
+
+.candado{
+  font-family:var(--titulo);
+  font-size:clamp(17px,3.6vw,21px);
+  text-transform:uppercase;
+  letter-spacing:.6px;
+  color:#fff;
+  margin-bottom:24px;
+}
+.candado-sigue{
+  color:var(--oro);
+  font-family:var(--cuerpo);
+  text-transform:none;
+  letter-spacing:0;
+  font-size:.62em;
+}
+
+.destacado{
+  border-left:2px solid var(--oro);
+  background:rgba(239,219,130,.05);
+  border-radius:0 12px 12px 0;
+  padding:22px 24px;
+  margin:34px 0;
+  text-align:left;
+}
+.destacado p{margin-bottom:0;color:var(--texto)}
+
+.cierre-copy{
+  font-family:var(--titulo);
+  font-size:clamp(19px,3.6vw,25px);
+  line-height:1.3;
+  text-transform:uppercase;
+  letter-spacing:.6px;
+  color:#fff;
+  margin-top:40px;
+}
+
+.aviso-urgencia{
+  display:inline-block;
+  font-size:11.5px;
+  line-height:1.5;
+  letter-spacing:.2px;
+  color:var(--rosa);
+  border:1px solid var(--borde);
+  border-radius:10px;
+  padding:10px 16px;
+  margin-top:20px;
+  max-width:480px;
+}
+
+/* ---------- Formulario ---------- */
+.formulario{margin-top:46px}
+
+.campo{margin-bottom:14px}
+
+.formulario input[type=text],
+.formulario input[type=email],
+.formulario input[type=tel]{
+  width:100%;
+  font-family:var(--cuerpo);
+  font-size:15px;
+  color:var(--texto);
+  background:rgba(243,233,234,.04);
+  border:1px solid var(--borde-suave);
+  border-radius:12px;
+  padding:17px 20px;
+  transition:border-color .2s, background .2s;
+}
+.formulario input::placeholder{
+  color:rgba(243,233,234,.42);
+  text-transform:uppercase;
+  font-size:12.5px;
+  letter-spacing:1.4px;
+}
+.formulario input:focus{
+  outline:none;
+  border-color:var(--oro);
+  background:rgba(239,219,130,.05);
+}
+
+.ayuda{
+  display:block;
+  font-size:12.5px;
+  line-height:1.5;
+  color:rgba(243,233,234,.45);
+  padding:9px 6px 0;
+}
+
+.pregunta{
+  border:1px solid var(--borde-suave);
+  border-radius:14px;
+  padding:22px 22px 18px;
+  margin-bottom:14px;
+  background:rgba(243,233,234,.02);
+}
+.pregunta legend{
+  float:left;
+  width:100%;
+  font-size:12.5px;
+  letter-spacing:1.6px;
+  text-transform:uppercase;
+  line-height:1.55;
+  color:var(--texto);
+  padding:0;
+  margin-bottom:16px;
+}
+.pregunta legend + *{clear:both}
+.opciones{display:flex;gap:12px}
+.opciones.apilada{flex-direction:column;gap:10px}
+.opciones.apilada .opcion span{
+  text-align:left;
+  padding:14px 20px;
+  letter-spacing:1.2px;
+  font-size:12.5px;
+}
+.opcion{flex:1}
+
+.campo-otro{margin-top:12px}
+.campo-otro[hidden]{display:none}
+.opcion input{position:absolute;opacity:0;pointer-events:none}
+.opcion span{
+  display:block;text-align:center;cursor:pointer;
+  border:1px solid var(--borde-suave);
+  border-radius:999px;
+  padding:12px 10px;
+  font-size:13px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--texto-suave);
+  transition:all .2s;
+}
+.opcion input:checked + span{
+  background:var(--oro);
+  border-color:var(--oro);
+  color:var(--negro);
+}
+.opcion input:focus-visible + span{outline:2px solid var(--rosa);outline-offset:2px}
+
+.privacidad{
+  display:flex;align-items:flex-start;gap:11px;
+  margin:22px 2px 26px;
+  font-size:13.5px;
+  color:var(--texto-suave);
+}
+.privacidad input{
+  appearance:none;-webkit-appearance:none;
+  flex:0 0 auto;width:19px;height:19px;margin-top:1px;
+  border:1px solid var(--borde);border-radius:5px;cursor:pointer;
+  transition:background .15s;
+}
+.privacidad input:checked{
+  background:var(--oro) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23292929' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round' d='M3 8.5l3.2 3.2L13 5'/%3E%3C/svg%3E") center/13px no-repeat;
+  border-color:var(--oro);
+}
+.privacidad a{color:var(--oro);text-underline-offset:3px}
+
+.boton{
+  width:100%;
+  font-family:var(--cuerpo);
+  font-size:15px;
+  font-weight:600;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--negro);
+  background:var(--oro);
+  border:1px solid var(--oro);
+  border-radius:999px;
+  padding:19px 22px;
+  cursor:pointer;
+  transition:all .2s;
+}
+.boton:hover{background:var(--vino);border-color:var(--vino);color:#fff}
+
+.nota-final{
+  text-align:center;
+  font-size:13px;
+  color:rgba(243,233,234,.4);
+  margin-top:20px;
+  line-height:1.6;
+}
+
+/* ---------- Gracias ---------- */
+.gracias{
+  display:none;
+  text-align:center;
+  border:1px solid var(--borde);
+  border-radius:16px;
+  padding:44px 28px;
+  background:rgba(239,219,130,.05);
+  margin-top:46px;
+}
+.gracias h2{
+  font-family:var(--titulo);font-weight:500;
+  font-size:clamp(22px,4.6vw,30px);
+  text-transform:uppercase;letter-spacing:1px;
+  color:#fff;margin-bottom:14px;
+}
+.gracias p{color:var(--texto-suave)}
+
+.recurso{
+  margin-top:30px;
+  padding-top:28px;
+  border-top:1px solid var(--borde);
+}
+.recurso[hidden]{display:none}
+.recurso-etiqueta{
+  display:block;
+  font-size:11.5px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--rosa);margin-bottom:10px;
+}
+.recurso-titulo{
+  font-family:var(--titulo);
+  font-size:clamp(17px,3.4vw,21px);
+  line-height:1.3;
+  color:#fff !important;
+  margin-bottom:20px;
+}
+.boton-recurso{display:inline-block;width:auto;padding:15px 34px;text-decoration:none;font-size:13.5px}
+
+/* ---------- Pie ---------- */
+.pie{
+  text-align:center;
+  margin-top:60px;
+  padding-top:28px;
+  border-top:1px solid rgba(243,233,234,.08);
+  font-size:12px;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+  color:rgba(243,233,234,.32);
+}
+.pie a{color:inherit;margin:0 8px;text-decoration:none}
+.pie a:hover{color:var(--oro)}
+
+@media (max-width:600px){
+  body{font-size:16px}
+  .chevrons{width:60vw;opacity:.35}
+  .envoltorio{padding:0 18px 70px}
+  .opciones{gap:10px}
+  .pregunta{padding:20px 18px 16px}
+}
+</style>
+</head>
+<body>
+
+<div class="fondo">
+  <div class="chevrons izq"></div>
+  <div class="chevrons der"></div>
+</div>
+
+<div class="envoltorio">
+
+  <header class="cabecera">
+    <div class="logo">
+      <img src="logo-violeta.png" alt="Violeta Gil Pablo">
+    </div>
+  </header>
+
+  <section class="hero">
+    <span class="etiqueta">Lista prioritaria de espera</span>
+    <h1>
+      Oficialmente, las plazas están cerradas
+      <span class="comillas">«SPC»</span>
+    </h1>
+    <div class="subrayado"></div>
+
+    <div class="foto">
+      <img src="violeta-foto.jpg" alt="Violeta Gil Pablo dando una clase de CrossFit">
+    </div>
+  </section>
+
+  <section class="texto">
+    <p class="candado">🔒 Plazas cerradas <span class="candado-sigue">· Pero sigue leyendo...</span></p>
+
+    <p class="blanco">Ahora mismo <strong>todas las plazas están cubiertas</strong> y solo puedo seguir incorporando mujeres nuevas tras una llamada para valorar su caso.</p>
+
+    <p>¿Te has quedado con ganas de entrar? No te preocupes: todavía puedes asegurarte de no perderte la próxima oportunidad.</p>
+
+    <div class="destacado">
+      <p>Cuando vuelva a haber plazas disponibles, <strong>avisaré primero a las mujeres que ya han mostrado interés</strong> y están en la lista prioritaria de espera. Antes de anunciarlo públicamente.</p>
+    </div>
+
+    <p>Déjame tus datos aquí abajo y serás la primera en saber cuándo hay disponibilidad, con la oportunidad de agendar tu llamada de valoración en cuanto se abra de nuevo.</p>
+
+    <p>Además, cuéntame qué te trae hasta aquí y <strong>te enviaré un recurso gratuito</strong> preparado para tu caso.</p>
+
+    <p class="cierre-copy">Apúntate ahora para asegurar tu sitio en la lista.</p>
+
+    <p class="aviso-urgencia">Al ser una lista prioritaria, quienes están aquí aseguran su llamada para valorar su plaza en SPC. Si esperas, es probable que las plazas se cubran solo con esta lista.</p>
+  </section>
+
+  <form class="formulario" id="formulario" novalidate>
+    <!-- Conectar aquí el CRM / email marketing (action + method, o el embed del proveedor) -->
+
+    <div class="campo">
+      <input type="text" name="nombre" placeholder="Tu nombre (sin apellidos)" autocomplete="given-name" required>
+    </div>
+
+    <div class="campo">
+      <input type="email" name="email" placeholder="El email que más uses" autocomplete="email" required>
+    </div>
+
+    <div class="campo">
+      <input type="tel" name="telefono" placeholder="Tu teléfono" autocomplete="tel" required>
+    </div>
+
+    <label class="privacidad">
+      <input type="checkbox" name="whatsapp_consentimiento" required>
+      <span>Acepto que me avisen por WhatsApp para agendar mi llamada de valoración en cuanto haya disponibilidad.</span>
+    </label>
+
+    <div class="campo">
+      <input type="text" name="instagram" placeholder="Tu Instagram (@tuusuario)" required>
+      <small class="ayuda">Te lo pido para poder localizarte por mensaje directo si no conseguimos contactar contigo por email o teléfono.</small>
+    </div>
+
+    <fieldset class="pregunta">
+      <legend>¿Qué te trae hasta aquí?</legend>
+      <div class="opciones apilada">
+        <label class="opcion"><input type="radio" name="motivo" value="orina" required><span>Pérdidas de orina al entrenar</span></label>
+        <label class="opcion"><input type="radio" name="motivo" value="posparto"><span>Recuperación posparto</span></label>
+        <label class="opcion"><input type="radio" name="motivo" value="diastasis"><span>Diástasis abdominal</span></label>
+        <label class="opcion"><input type="radio" name="motivo" value="lumbar"><span>Dolor lumbar o pélvico</span></label>
+        <label class="opcion"><input type="radio" name="motivo" value="otro"><span>Otro</span></label>
+      </div>
+      <div class="campo-otro" id="campoOtro" hidden>
+        <input type="text" name="motivo_otro" placeholder="Cuéntame brevemente qué te pasa">
+      </div>
+    </fieldset>
+
+    <fieldset class="pregunta">
+      <legend>¿Entrenas actualmente? (CrossFit, Hyrox, gimnasio o cualquier entrenamiento de fuerza)</legend>
+      <div class="opciones">
+        <label class="opcion"><input type="radio" name="entrena" value="si" required><span>Sí</span></label>
+        <label class="opcion"><input type="radio" name="entrena" value="no"><span>No</span></label>
+      </div>
+    </fieldset>
+
+    <label class="privacidad">
+      <input type="checkbox" name="privacidad" required>
+      <span>He leído y acepto la <a href="#" target="_blank" rel="noopener">política de privacidad</a>.</span>
+    </label>
+
+    <button type="submit" class="boton">Quiero entrar en la lista prioritaria</button>
+
+    <p class="nota-final">Sin compromiso · Te avisamos antes de la apertura pública</p>
+  </form>
+
+  <div class="gracias" id="gracias">
+    <h2>Ya estás en la lista</h2>
+    <p>Serás de las primeras en enterarte cuando vuelva a haber disponibilidad, antes de que se anuncie públicamente. Te avisaremos por WhatsApp al número que nos has dejado para agendar tu llamada de valoración.</p>
+
+    <div class="recurso" id="recurso" hidden>
+      <span class="recurso-etiqueta">Tu recurso gratuito</span>
+      <p class="recurso-titulo" id="recursoTitulo"></p>
+      <a class="boton boton-recurso" id="recursoEnlace" href="#" target="_blank" rel="noopener">Descargar ahora</a>
+    </div>
+  </div>
+
+  <footer class="pie">
+    <!-- Enlaces legales: completar con las URLs reales -->
+    <a href="#">Política de privacidad</a>·<a href="#">Aviso legal</a>
+    <div style="margin-top:12px">© Violeta Gil Pablo</div>
+  </footer>
+
+</div>
+
+<script>
+/* ------------------------------------------------------------------
+   GOOGLE SHEETS
+   Pega aquí la "URL de la app web" que te da Apps Script al desplegar
+   (ver instrucciones que te ha pasado Cristian). Mientras esté vacía,
+   el formulario sigue funcionando pero no guarda nada en la hoja.
+------------------------------------------------------------------ */
+const URL_GOOGLE_SHEETS = 'https://script.google.com/macros/s/AKfycbzaBd1i7-MAciO9ceFSLG1XrE7WrcjifNae5rCO6ymJCJ4hPIIZbZOkDtFR3vLbg0pl/exec';
+
+/* ------------------------------------------------------------------
+   RECURSOS POR MOTIVO
+   Pega aquí la URL de cada recurso (PDF, vídeo, Drive, Notion...).
+   Mientras la url esté vacía, no se muestra el botón de descarga.
+------------------------------------------------------------------ */
+const RECURSOS = {
+  orina:     { titulo: 'Guía: cómo dejar de tener pérdidas de orina entrenando', url: '' },
+  posparto:  { titulo: 'Guía: vuelta al entrenamiento después del parto',        url: '' },
+  diastasis: { titulo: 'Guía: diástasis abdominal y entrenamiento de fuerza',    url: '' },
+  lumbar:    { titulo: 'Guía: dolor lumbar y pélvico en mujeres que entrenan',   url: '' },
+  otro:      { titulo: 'Guía: suelo pélvico para mujeres que entrenan',          url: '' }
+};
+
+const formulario = document.getElementById('formulario');
+const campoOtro = document.getElementById('campoOtro');
+
+formulario.motivo.forEach(function (radio) {
+  radio.addEventListener('change', function () {
+    const esOtro = this.value === 'otro';
+    campoOtro.hidden = !esOtro;
+    campoOtro.querySelector('input').required = esOtro;
+  });
+});
+
+formulario.addEventListener('submit', function (e) {
+  e.preventDefault();
+  if (!this.checkValidity()) {
+    this.reportValidity();
+    return;
+  }
+
+  const recurso = RECURSOS[this.motivo.value];
+
+  if (URL_GOOGLE_SHEETS) {
+    const datos = new FormData(this);
+    if (recurso) {
+      datos.append('recurso_titulo', recurso.titulo);
+      datos.append('recurso_url', recurso.url || '');
+    }
+    fetch(URL_GOOGLE_SHEETS, { method: 'POST', mode: 'no-cors', body: datos });
+  }
+
+  if (recurso && recurso.url) {
+    document.getElementById('recursoTitulo').textContent = recurso.titulo;
+    document.getElementById('recursoEnlace').href = recurso.url;
+    document.getElementById('recurso').hidden = false;
+  }
+
+  this.style.display = 'none';
+  const gracias = document.getElementById('gracias');
+  gracias.style.display = 'block';
+  gracias.scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
+</script>
+
+</body>
+</html>
